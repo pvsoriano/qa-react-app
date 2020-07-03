@@ -1,4 +1,4 @@
-// import dependencies
+//import dependencies
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -8,14 +8,13 @@ const morgan = require('morgan');
 // define the Express app
 const app = express();
 
-// simple database
-// 06/30/20 - connect to a real database instead of an array
+// the database
 const questions = [];
 
-// app security w/Helmet
+// enhance your app security with Helmet
 app.use(helmet());
 
-// parse application/json content-type
+// use bodyParser to parse application/json content-type
 app.use(bodyParser.json());
 
 // enable all CORS requests
@@ -30,48 +29,49 @@ app.get('/', (req, res) => {
     id: q.id,
     title: q.title,
     description: q.description,
-    answers: q.answers,
+    answers: q.answers.length,
   }));
   res.send(qs);
 });
 
 // get a specific question
 app.get('/:id', (req, res) => {
-    const question = questions.filter(q => (q.id === parseInt(req.params.id)));
-    if (question.length > 1) return res.status(500).send();
-    if (question.length === 0) return res.status(404).send();
-    res.send(question[0]);
+  const question = questions.filter(q => (q.id === parseInt(req.params.id)));
+  if (question.length > 1) return res.status(500).send();
+  if (question.length === 0) return res.status(404).send();
+  res.send(question[0]);
 });
+
 
 // insert a new question
 app.post('/', (req, res) => {
-    const {title, description} = req.body;
-    const newQuestion = {
-        id: questions.length + 1,
-        title,
-        description,
-        answer: [],
-    };
-    questions.push(newQuestion);
-    res.status(200).send();
+  const {title, description} = req.body;
+  const newQuestion = {
+    id: questions.length + 1,
+    title,
+    description,
+    answers: [],
+  };
+  questions.push(newQuestion);
+  res.status(200).send();
 });
 
 // insert a new answer to a question
 app.post('/answer/:id', (req, res) => {
-    const {answer} = req.body;
+  const {answer} = req.body;
 
-    const question = questions.filter(q => (q.id === parseInt(req.params.id)));
-    if (question.length > 1) return res.status(500).send();
-    if (question.length === 0) return res.status(404).send();
+  const question = questions.filter(q => (q.id === parseInt(req.params.id)));
+  if (question.length > 1) return res.status(500).send();
+  if (question.length === 0) return res.status(404).send();
 
-    question[0].answers.push({
-        answer,
-    });
+  question[0].answers.push({
+    answer,
+  });
 
-    res.status(200).send();
+  res.status(200).send();
 });
 
-// start server
+// start the server
 app.listen(8081, () => {
-    console.log('listening on port 8081');
+  console.log('listening on port 8081');
 });

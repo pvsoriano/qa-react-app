@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import NavBar from './NavBar/NavBar';
+import Questions from './Questions/Questions';
 
 class App extends Component {
     render() {
         return (
             <div>
                 <NavBar />
-                <p>Work in progress.</p>
+                <Questions />
+                <p>TEST</p>
             </div>
         );
     }
