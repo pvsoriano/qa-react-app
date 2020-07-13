@@ -5,6 +5,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 
+
 // define the Express app
 const app = express();
 
@@ -42,6 +43,12 @@ app.get('/:id', (req, res) => {
   res.send(question[0]);
 });
 
+const checkJwt = jwt({
+    secret: jwksRsa.expressJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 5,
+        jwksUri: 'https://pvsoriano.us.auth0.com/.well-known/jwks.json'
 
 // insert a new question
 app.post('/', (req, res) => {
